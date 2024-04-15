@@ -17,16 +17,3 @@ const PORT = 3004;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
-
-const mysql = require('mysql2');
-
-// Create a connection pool
-const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'stefan',
-    password: 'stefan',
-    database: 'taskflow_db'
-});
-
-// Export the pool to be used in other modules
-module.exports = pool.promise();
