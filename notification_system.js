@@ -1,4 +1,4 @@
-// Task Model (assuming a data structure)
+
 const Task = function(id, title, dueDate, hasNotification, notificationSentAt) {
   this.id = id;
   this.title = title;
@@ -7,12 +7,10 @@ const Task = function(id, title, dueDate, hasNotification, notificationSentAt) {
   this.notificationSentAt = notificationSentAt;
 };
 
-// Interface for Notification Service
 interface INotificationService {
   showNotification(message: string): void;
 }
 
-// In-App Notification Sender (replace with actual notification logic)
 class InAppNotificationSender implements INotificationSender {
   private notificationService: INotificationService;
 
@@ -28,8 +26,7 @@ class InAppNotificationSender implements INotificationSender {
 
 // Notification Manager
 class NotificationManager {
-  private dbContext: any; // Replace with your actual database interaction logic
-
+  private dbContext: any;
   constructor(dbContext: any) {
     this.dbContext = dbContext;
   }
@@ -37,7 +34,7 @@ class NotificationManager {
   public checkForTaskNotifications(): void {
     const notificationThreshold = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
-    const tasks = this.dbContext.getTasks() // Replace with your database query logic
+    const tasks = this.dbContext.getTasks() 
       .filter(task => task.hasNotification && (
         !task.notificationSentAt ||
         Date.now() - task.notificationSentAt.getTime() >= notificationThreshold
@@ -47,17 +44,15 @@ class NotificationManager {
       const notificationSender = new InAppNotificationSender(new NotificationService());
       notificationSender.sendNotification(task.title, task.dueDate);
 
-      task.hasNotification = false; // Reset notification flag after sending
-      task.notificationSentAt = new Date(); // Update sent timestamp
-      this.dbContext.updateTask(task); // Replace with your database update logic
+      task.hasNotification = false; 
+      task.notificationSentAt = new Date(); 
+      this.dbContext.updateTask(task); 
     });
   }
 }
-
-// Example Usage (assuming you have a database interaction layer)
 const notificationManager = new NotificationManager({
-  getTasks: () => /* Your logic to fetch tasks from database */,
-  updateTask: (task) => /* Your logic to update task in database */
+  getTasks: () => ,
+  updateTask: (task) => 
 });
 
 notificationManager.checkForTaskNotifications();
