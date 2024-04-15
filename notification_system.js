@@ -1,14 +1,13 @@
-const mongoose = require('mongoose');
+const mysql = require('mysql2/promise');
 
-// Task Schema (Mongoose model)
-const taskSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  dueDate: { type: Date, required: true },
-  hasNotification: { type: Boolean, default: false },
-  notificationSentAt: { type: Date },
-});
-
-const Task = mongoose.model('Task', taskSchema);
+// Task Model (assuming a data structure)
+const Task = function(id, title, dueDate, hasNotification, notificationSentAt) {
+  this.id = id;
+  this.title = title;
+  this.dueDate = dueDate;
+  this.hasNotification = hasNotification;
+  this.notificationSentAt = notificationSentAt;
+};
 
 // Interface for Notification Service
 interface INotificationService {
@@ -25,48 +24,55 @@ class InAppNotificationSender implements INotificationSender {
 
   public sendNotification(title: string, dueDate: Date): void {
     const message = `Task Deadline: ${title} - Due on ${dueDate.toLocaleDateString()}`;
-    console.log(`Notification: ${message}`); // Simulate notification for now, replacing with the actual sending logic?
+    console.log(`Notification: ${message}`); // Simulate notification for now, replacing with the current sending logic?
     this.notificationService.showNotification(message);
   }
 }
 
 // Notification Manager
 class NotificationManager {
-  private db: mongoose.Connection;
+  private pool: mysql.Pool;
 
-  constructor(mongoUrl: string) {
-    this.db = mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+  constructor(config: mysql.PoolOptions) {
+    this.pool = mysql.createPool(config);
   }
 
   public async checkForTaskNotifications(): Promise<void> {
     const notificationThreshold = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
+    const connection = await this.pool.getConnection();
     try {
-      const tasks = await Task.find({
-        hasNotification: true,
-        $or: [
-          { notificationSentAt: null },
-          { $where: `this.notificationSentAt.getTime() + ${notificationThreshold} < Date.now()` },
-        ],
-      });
+      const [tasks] = await connection.query(
+        `SELECT * FROM tasks WHERE hasNotification = ? AND (notificationSentAt IS NULL OR notificationSentAt + INTERVAL ? SECOND < NOW())`,
+        [true, notificationThreshold / 1000]
+      );
 
-      tasks.forEach(async (task) => {
+      for (const task of tasks) {
         const notificationSender = new InAppNotificationSender(new NotificationService());
         notificationSender.sendNotification(task.title, task.dueDate);
 
-        task.hasNotification = false; // Reset notification flag after sending
-        task.notificationSentAt = new Date(); // Update sent timestamp
-        await task.save();
-      });
+        await connection.query('UPDATE tasks SET hasNotification = ?, notificationSentAt = NOW() WHERE id = ?', [
+          false,
+          task.id,
+        ]);
+      }
     } catch (error) {
       console.error('Error checking for task notifications:', error);
+    } finally {
+      connection.release();
     }
   }
 }
 
-// Example Usage
-const mongoUrl = 'mongodb://localhost:27017/your_database_name'; // Replacing with MongoDB connection string
-const notificationManager = new NotificationManager(mongoUrl);
+//MySQL connection details
+const config = {
+  host: 'localhost',
+  user: 'your_username',
+  password: 'your_password',
+  database: 'your_database_name',
+};
+
+const notificationManager = new NotificationManager(config);
 
 notificationManager.checkForTaskNotifications()
   .then(() => console.log('Checked for task notifications'))
