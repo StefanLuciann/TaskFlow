@@ -1,0 +1,21 @@
+{
+  "name": "taskflow",
+  "version": "1.0.0",
+  "description": "What is the one thing that most of the people lack when it comes to increasing productivity? The answer is: time and work management. Designed with simplicity and efficiency in mind, TaskFlow empowers users to effortlessly organize their daily tasks, projects, and goals with ease. Seamlessly navigate through your to-do lists, prioritize tasks, set deadlines, and track progress—all within a clean and intuitive interface. Whether you're a busy professional, a student with multiple assignments, or a homemaker juggling various responsibilities, TaskFlow adapts to your unique workflow, helping you stay focused and productive every step of the way.",
+  "main": "index.js",
+  "scripts": {
+    "devStart": "nodemon backend/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-ejs-layouts": "^2.5.1",
+    "mysql2": "^3.9.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
