@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error('Invalid username or password.');
             }
             // Aici poți redirecționa utilizatorul sau efectua alte acțiuni în funcție de răspunsul serverului
+            window.location.href = '/index'; // Redirecționează utilizatorul către pagina index după autentificare cu succes
         })
         .catch(error => {
             errorMessage.textContent = error.message;

@@ -4,7 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5; 
+            font-family: Arial, sans-serif; 
+        }
+
+        .container {
+            text-align: center;
+            background-color: #ffffff; 
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+            width: 300px; 
+        }
+
+        input[type="text"],
+        input[type="password"],
+        button {
+            margin: 10px auto; 
+            display: block; 
+            padding: 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            width: calc(100% - 30px); 
+        }
+
+        button {
+            background-color: #007bff; 
+            color: #ffffff; 
+            cursor: pointer;
+            transition: background-color 0.3s ease; 
+        }
+
+        button:hover {
+            background-color: #0056b3; 
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+
+        .forgot-password {
+            margin-top: 15px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -15,6 +66,7 @@
             <button type="submit">Login</button>
             <p id="error-message" class="error-message"></p>
         </form>
+        <p class="forgot-password">Forgot your password? <a href="/forgot-password">Reset Password</a></p>
         <p>Don't have an account? <a href="/register">Register</a></p>
     </div>
     <script src="script.js"></script>
