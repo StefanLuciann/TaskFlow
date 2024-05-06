@@ -2,72 +2,54 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-Do List</title>
+    <title>Welcome to TaskFlow</title>
     <style>
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            text-align: center;
             margin: 0;
-            background-color: #f5f5f5; 
-            font-family: Arial, sans-serif; 
+            padding: 0;
         }
 
         .container {
-            text-align: center;
-            background-color: #ffffff; 
-            padding: 30px;
+            background-color: #ffffff;
+            padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 100px auto;
+            text-align: center;
         }
 
-        input[type="text"],
-        input[type="password"],
         button {
-            margin: 10px;
-            padding: 15px;
+            padding: 10px;
             font-size: 16px;
-            border: none;
             border-radius: 5px;
-        }
-
-        button {
-            background-color: #007bff; 
-            color: #ffffff; 
+            border: none;
+            background-color: #007bff;
+            color: white;
             cursor: pointer;
-            transition: background-color 0.3s ease; 
+            transition: background-color 0.3s;
+            margin: 10px;
         }
 
         button:hover {
-            background-color: #0056b3; 
-        }
-
-        .error-message {
-            color: red;
-            margin-top: 10px;
-        }
-
-        .auth-links {
-            margin-top: 20px;
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>To-Do List</h1>
-        <input type="text" id="taskInput" placeholder="Add a new task">
-        <button onclick="addTask()">Add Task</button>
-        <ul id="taskList">
-           
-        </ul>
-        <div class="auth-links">
-            <p>Already have an account? <a href="/login">Login</a></p>
-            <p>Don't have an account? <a href="/register">Register</a></p>
-            <p>Forgot your password? <a href="/forgot-password">Reset Password</a></p>
-        </div>
+        <h1>Welcome to TaskFlow</h1>
+        <p>
+            TaskFlow helps you manage your daily tasks, projects, and goals with ease. Create to-do lists, set priorities, 
+            and track progress in a simple and intuitive interface.
+        </p>
+
+        <!-- Butoane pentru login și register -->
+        <button onclick="window.location.href='/login'">Login</button>
+        <button onclick="window.location.href='/register'">Register</button>
     </div>
-    <script src="script.js"></script>
 </body>
 </html>
