@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const taskSchema = new mongoose.Schema({
-  title: { type: String, required: [true, 'Title is required'] }, // Validated with custom error message
+  title: { type: String, required: [true, 'Title is required'] }, 
   completed: { type: Boolean, default: false },
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to User model
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, 
 }, {
-  timestamps: true, // Adds createdAt and updatedAt timestamps
+  timestamps: true, 
 });
 
-module.exports = mongoose.model('Task', taskSchema); // Export the Task model
+module.exports = mongoose.model('Task', taskSchema); 

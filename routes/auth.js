@@ -8,7 +8,7 @@ module.exports = (app, User, bcrypt) => {
       if (!user || !(await bcrypt.compare(password, user.password))) {
         return res.status(400).render('login', { error: 'Invalid username or password.' });
       }
-
+      
       res.redirect('/tasks'); // Redirect after successful login
     } catch (error) {
       res.status(500).send('Internal server error.');
@@ -26,7 +26,7 @@ module.exports = (app, User, bcrypt) => {
       try {
         const newUser = new User({ username, email, password: hash });
         await newUser.save();
-        res.redirect('/login'); // Redirect after successful registration
+        res.redirect('/login'); 
       } catch (error) {
         if (error.code === 11000) {
           return res.status(400).render('register', { error: 'Username or email already exists.' });

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <!-- Adaugă stiluri CSS -->
+
     <style>
         body {
             display: flex;
@@ -41,6 +41,19 @@
         .error-message {
             color: red;
         }
+        .additional-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .additional-links a {
+            text-decoration: none;
+            color: #007bff;
+            transition: color 0.3s ease;
+        }
+        .additional-links a:hover {
+            color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -54,8 +67,12 @@
                 <p class="error-message"><%= error %></p>
             <% } %>
         </form>
-        
-        <a href="/register">Register</a>
+
+     
+        <div class="additional-links">
+            <a href="/register">Register</a>
+            <a href="/forgot-password">Forgot Password?</a>
+        </div>
     </div>
 </body>
 </html>

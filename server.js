@@ -139,7 +139,7 @@ app.get('/tasks', isAuthenticated, async (req, res) => {
     res.render('tasks', { tasks }); // Render tasks.ejs with the fetched tasks
   } catch (error) {
     console.error('Error fetching tasks:', error);
-    res.status(500).send('Error fetching tasks.');
+    res.status(500).send('Error fetching tasks.');  
   }
 });
 
