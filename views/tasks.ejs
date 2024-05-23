@@ -65,7 +65,7 @@
     <div class="container">
         <h1>Your Tasks</h1>
 
-        <!-- Listă de sarcini -->
+     
         <ul class="task-list">
             <% if (tasks && tasks.length > 0) { %>
                 <% tasks.forEach(task => { %>
@@ -76,13 +76,13 @@
             <% } %>
         </ul>
 
-        <!-- Formular pentru adăugarea unei sarcini -->
+       
         <form action="/tasks" method="POST">
             <input type="text" name="title" placeholder="Add a new task" required />
             <button type="submit">Add Task</button>
         </form>
 
-        <!-- Buton de logout -->
+      
         <form action="/logout" method="POST">
             <button type="submit">Logout</button>
         </form>
