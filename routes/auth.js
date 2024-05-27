@@ -3,17 +3,24 @@ module.exports = (app, User, bcrypt) => {
     const { username, password } = req.body;
 
     try {
-      const user = await User.findOne({ username });
+        const user = await User.findOne({ username });
 
-      if (!user || !(await bcrypt.compare(password, user.password))) {
-        return res.status(400).render('login', { error: 'Invalid username or password.' });
-      }
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            return res.status(400).render('login', { error: 'Invalid username or password.' });
+        }
 
-      res.redirect('/tasks'); // Redirect after successful login
+        req.login(user, (err) => {
+            if (err) {
+                console.error('Error during login:', err);
+                return res.status(500).send('Internal server error.');
+            }
+            return res.redirect('/tasks');
+        });
     } catch (error) {
-      res.status(500).send('Internal server error.');
+        console.error('Error during login:', error);
+        res.status(500).send('Internal server error.');
     }
-  });
+});
 
   app.post('/register', (req, res) => {
     const { username, email, password } = req.body;

@@ -36,12 +36,13 @@
             border-bottom: none;
         }
 
-        input[type="text"] {
+        input[type="text"], select, input[type="date"] {
             padding: 10px;
             font-size: 16px;
             border-radius: 5px;
             border: 1px solid #ddd;
             width: 80%;
+            margin-bottom: 10px;
         }
 
         button {
@@ -59,26 +60,69 @@
         button:hover {
             background-color: #0056b3;
         }
+
+        /* Task box styling */
+        .task-box {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .task-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .task-description {
+            margin-bottom: 5px;
+        }
+
+        .task-priority {
+            margin-bottom: 5px;
+        }
+
+        .task-deadline {
+            margin-bottom: 10px;
+        }
+        .task-input {
+            display: block;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Your Tasks</h1>
 
+        <!-- Button to access task list -->
+        <a href="/tasks/list">View Tasks List</a>
+
         <!-- Listă de sarcini -->
-        <ul class="task-list">
-            <% if (tasks && tasks.length > 0) { %>
-                <% tasks.forEach(task => { %>
-                    <li><%= task.title %></li>
-                <% }); %>
-            <% } else { %>
-                <li>No tasks available</li>
-            <% } %>
-        </ul>
+        <% if (tasks && tasks.length > 0) { %>
+            <% tasks.forEach(task => { %>
+                <div class="task-box">
+                    <div class="task-title"><%= task.title %></div>
+                    <div class="task-description"><%= task.description %></div>
+                    <div class="task-priority">Priority: <%= task.priority %></div>
+                    <div class="task-deadline">Deadline: <%= task.deadline.toLocaleDateString() %></div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p>No tasks available</p>
+        <% } %>
 
         <!-- Formular pentru adăugarea unei sarcini -->
         <form action="/tasks" method="POST">
-            <input type="text" name="title" placeholder="Add a new task" required />
+            <input type="text" name="title" placeholder="Task name" class="task-input" required />
+            <input type="text" name="description" placeholder="Description" class="task-input" required />
+            <select name="priority" class="task-input">
+                <option value="1">High</option>
+                <option value="2">Medium</option>
+                <option value="3">Low</option>
+            </select>
+            <input type="date" name="deadline" class="task-input" required />
             <button type="submit">Add Task</button>
         </form>
 

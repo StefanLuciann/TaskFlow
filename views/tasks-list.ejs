@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tasks List</title>
+    <style>
+        /* Styles for task box */
+        .task-box {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Title style */
+        .task-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Description style */
+        .task-description {
+            font-size: 16px;
+            color: #666666;
+            margin-bottom: 10px;
+        }
+
+        /* Priority and Deadline style */
+        .task-metadata {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+            margin-left: auto; /* Adjusted to move metadata to the right */
+        }
+
+        /* Priority and Deadline container style */
+        .metadata-container {
+            text-align: right;
+        }
+
+        /* Edit button style */
+        .edit-button {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            width: 80px; /* Smaller width */
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .edit-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <!-- Add any necessary CSS stylesheets here -->
+</head>
+<body>
+    <h1>Tasks List</h1>
+    <ul>
+        <% tasks.forEach(task => { %>
+            <li>
+                <div class="task-box">
+                    <div>
+                      <h2 class="task-title"><%= task.title %></h2>
+                      <p class="task-description"><%= task.description %></p> <!-- Display description -->
+                    </div>
+                    <a href="/tasks/edit/<%= task._id %>" class="edit-button">Edit</a>
+                    <div class="task-metadata">
+                      <div class="metadata-container">
+                        <p><strong>Priority:</strong> <%= task.priority == 1 ? 'High' : task.priority == 2 ? 'Medium' : 'Low' %></p>
+                        <% if (task.deadline) { %>
+                          <p><strong>Deadline:</strong> <%= task.deadline.toLocaleDateString() %></p>
+                        <% } %>
+                        <p><strong>Progress:</strong> <%= task.progress %></p>
+                      </div>
+                    </div>
+                  </div>
+            </li>
+        <% }); %>
+    </ul>
+</body>
+</html>

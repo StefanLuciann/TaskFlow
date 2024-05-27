@@ -34,3 +34,35 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// Function for Task List
+function loadTasks() {
+    // Fetch tasks from the server
+    fetch('/tasks/list')
+        .then(response => response.json())
+        .then(tasks => {
+            // Display tasks on the page
+            const tasksList = document.getElementById('tasks-list');
+            tasksList.innerHTML = ''; // Clear existing tasks
+
+            tasks.forEach(task => {
+                const listItem = document.createElement('li');
+                listItem.textContent = task.title;
+                tasksList.appendChild(listItem);
+            });
+        })
+        .catch(error => console.error('Error loading tasks:', error));
+}
+
+// Function for Task Edit
+function editTask(taskId, baseUrl = '') {
+    // Redirect to the edit task page with the task ID
+    const newUrl = `${baseUrl}/tasks/edit/${taskId}`;
+    window.location.assign(newUrl);
+}
+
+// Export the function
+module.exports = {
+    loadTasks, editTask
+};
+

@@ -48,15 +48,20 @@ passport.use(new LocalStrategy(
       if (!user) {
         return done(null, false, { message: 'Incorrect username.' });
       }
+      console.log("valid password");
+      console.log("User:", user);
 
       const isValidPassword = await bcrypt.compare(password, user.password);
+      console.log("MERGE");
 
       if (!isValidPassword) {
         return done(null, false, { message: 'Incorrect password.' });
       }
+      console.log("AAAAA");
 
       return done(null, user);
     } catch (error) {
+      console.error("Error during password comparison:", error);
       return done(error);
     }
   }
@@ -133,9 +138,20 @@ app.post('/register', async (req, res) => {
 });
 
 // Task management routes
-app.get('/tasks', isAuthenticated, async (req, res) => {
+app.get('/tasks/list', async (req, res) => {
   try {
-    const tasks = await Task.find({ userId: req.user._id }); // Fetch tasks for logged-in user
+      const tasks = await Task.find().sort({ deadline: 1, priority: 1 });
+      res.render('tasks-list', { tasks });
+  } catch (error) {
+      console.error('Error fetching tasks:', error);
+      res.status(500).send('Error fetching tasks.');
+  }
+});
+
+// Route for rendering the tasks page
+app.get('/tasks', async (req, res) => {
+  try {
+    const tasks = await Task.find({}).sort({ deadline: 1 }); // Sort tasks by deadline ascending
     res.render('tasks', { tasks }); // Render tasks.ejs with the fetched tasks
   } catch (error) {
     console.error('Error fetching tasks:', error);
@@ -143,21 +159,53 @@ app.get('/tasks', isAuthenticated, async (req, res) => {
   }
 });
 
-app.post('/tasks', isAuthenticated, async (req, res) => {
-  const { title } = req.body;
+// Route to display the edit form
+app.get('/tasks/edit/:id', async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    if (!task) {
+      return res.status(404).send('Task not found');
+    }
+    res.render('edit-task', { task });
+  } catch (error) {
+    console.error('Error fetching task for edit:', error);
+    res.status(500).send('Error fetching task for edit');
+  }
+});
+
+// Route to handle the edit form submission
+app.post('/tasks/edit/:id', async (req, res) => {
+  const { title, description, priority, deadline, progress } = req.body;
+  console.log('Updating task with values:', { title, description, priority, deadline, progress });
+  try {
+    await Task.findByIdAndUpdate(req.params.id, { title, description, priority, deadline, progress });
+    res.redirect('/tasks/list');
+  } catch (error) {
+    console.error('Error updating task:', error);
+    res.status(500).send('Error updating task');
+  }
+});
+
+// Route for adding a new task (without authentication)
+app.post('/tasks', async (req, res) => {
+  console.log(req.body);
+  const { title, description, priority, deadline, progress } = req.body;
 
   if (!title || title.trim() === '') {
-    return res.status(400).send('Task title cannot be empty'); // Validate input
+    return res.status(400).send('Task title cannot be empty');
   }
 
   try {
     const newTask = new Task({
       title,
-      userId: req.user._id,
+      description, // Add description to task creation
+      priority,
+      deadline,
+      completed: false,
     });
 
-    await newTask.save(); // Save the new task
-    res.redirect('/tasks'); // Redirect to tasks after adding a new one
+    await newTask.save();
+    res.redirect('/tasks');
   } catch (error) {
     console.error('Error creating task:', error);
     res.status(500).send('Error creating task.');
@@ -174,3 +222,5 @@ app.post('/logout', isAuthenticated, (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+module.exports=app;
